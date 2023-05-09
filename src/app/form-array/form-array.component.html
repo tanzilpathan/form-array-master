@@ -1,0 +1,75 @@
+<h3>Form Array With Custom Validation</h3>
+<div>
+    <button *ngIf="scheme_slab_details?.length == 0" class="cursor" type="button" (click)="addSlab('','')">Add Slab</button>
+    <form [formGroup]="slabForm">
+        <table>
+            <thead>
+                <th class="style_slab_table">Slab From</th>
+                <th class="style_slab_table">Slab To</th>
+                <th class="style_slab_table">Action</th>
+            </thead>
+            <tbody formArrayName="scheme_slab_details">
+                <tr *ngFor="let itemrow of slabForm.controls.scheme_slab_details.controls; let i=index;let l=last"
+                    [formGroupName]="i">
+                    <td class="style_slab_table">
+                        <div>
+                            <input appAppInputRestriction="integer"
+                                formControlName="slab_from" (input)="checkValidation(i)"
+                                class="form-control">
+                        </div>
+                        <div *ngIf="slabForm.controls.scheme_slab_details?.controls[i].get('slab_from')?.errors"
+                            class="invalid-feedback d-block">
+                            <div
+                                *ngIf="slabForm.controls.scheme_slab_details?.controls[i].get('slab_from')?.errors.required">
+                                Please Enter Slab Value From</div>
+                           
+                            <div
+                                *ngIf="slabForm.controls.scheme_slab_details?.controls[i].get('slab_from')?.errors.pattern">
+                                Please Enter Valid Value, Value Should Be Greater Than Zero
+                            </div>
+                        </div>
+                        <div *ngIf="getAtributeSlabFromAt(i)?.errors?.['fromValueShouldBeGreaterThanTrue']"
+                            class="invalid-feedback d-block">
+                            Slab Value From Should Be Greater Than Previous Slab Value To 
+                        </div>
+                    </td>
+                    <td class="style_slab_table">
+                        <div>
+                            <input appAppInputRestriction="integer"
+                                formControlName="slab_to" (input)="checkValidation(i)"
+                                class="form-control">
+                        </div>
+                        <div *ngIf="slabForm.controls.scheme_slab_details?.controls[i].get('slab_to')?.errors"
+                            class="invalid-feedback d-block">
+                            <div
+                                *ngIf="slabForm.controls.scheme_slab_details?.controls[i].get('slab_to')?.errors.required">
+                                Please Enter Slab Value To</div>
+                            <div
+                                *ngIf="slabForm.controls.scheme_slab_details?.controls[i].get('slab_to')?.errors.pattern">
+                                Please Enter Valid Value, Value Should Be Greater Than Zero
+                            </div>
+                        </div>
+                        <div *ngIf="getAtributeSlabFromAt(i)?.errors?.['fromValueShouldBeLess']"
+                            class="invalid-feedback d-block">
+                            Slab Value To Should Be Greater Than Slab Value From
+                        </div>
+                    </td>
+                    <td class="style_slab_table">
+                        <button type="button" class="cursor"
+                        *ngIf="slabForm.controls.scheme_slab_details.controls.length > 1"
+                            (click)="removeSlab(i)">
+                            Remove
+                        </button>
+                        <button type="button" class="cursor"
+                        *ngIf="l" type="button" (click)="addSlab('add',i)">
+                            Add
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+</div>
+<button *ngIf="scheme_slab_details?.length != 0"  type="button" (click)="clearForm()"> Clear Form</button>
+<pre>{{slabForm.value | json}}</pre>

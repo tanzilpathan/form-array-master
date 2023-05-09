@@ -1,0 +1,10 @@
+.style_slab_table{
+    padding: 0px 10px;
+}
+.cursor{
+    cursor: pointer;
+}
+.invalid-feedback {
+    color: maroon;
+    font-size: 12px
+}
